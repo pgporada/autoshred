@@ -13,13 +13,13 @@ BLU=$(tput setaf 4)
 KEYPRESS=""
 
 usage() {
-    echo "${BLD}${RST}#####################################################################################${RST}"
+    echo "${BLD}${RED}#####################################################################################${RST}"
     echo "${BLD}${RED}# WARNING: THIS SCRIPT WILL NUKE DATA IN ANY BLOCK DEVICE NOT IN THE EXCLUSION LIST #${RST}"
     echo "${BLD}${RED}# WARNING: THIS SCRIPT WILL NUKE DATA IN ANY BLOCK DEVICE NOT IN THE EXCLUSION LIST #${RST}"
     echo "${BLD}${RED}# WARNING: THIS SCRIPT WILL NUKE DATA IN ANY BLOCK DEVICE NOT IN THE EXCLUSION LIST #${RST}"
     echo "${BLD}${RED}# WARNING: THIS SCRIPT WILL NUKE DATA IN ANY BLOCK DEVICE NOT IN THE EXCLUSION LIST #${RST}"
     echo "${BLD}${RED}# WARNING: THIS SCRIPT WILL NUKE DATA IN ANY BLOCK DEVICE NOT IN THE EXCLUSION LIST #${RST}"
-    echo "${BLD}${RST}#####################################################################################${RST}"
+    echo "${BLD}${RED}#####################################################################################${RST}"
     echo
     echo "${BLD}Current exclusion list. THIS IS IMPORTANT.${RST}"
     echo "${BLD}+--------------------+${RST}"
@@ -27,7 +27,7 @@ usage() {
         echo "/dev/$i"
     done
     echo
-    echo "${BLD}Usage${RST}"
+    echo "${BLD}Script Usage${RST}"
     echo "${BLD}+--------------------+${RST}"
     echo "[ -f ]   |   Run the script. By default this will be 3 passes of the DoD wipe."
     echo "Example: sudo ./$(basename $0) -f"
@@ -105,36 +105,33 @@ root_check() {
 script_update() {
     DIR=$(dirname "$(readlink -f "$0")")
     cd "${DIR}"
+    echo "Checking for latest version of $(basename $0)"
     git pull
 }
 
+script_update
 if [ $# -ne 1 ]; then
     usage
     exit 1
 fi
 
-while getopts ":f:h:s" opt; do
+while getopts "fhs" opt; do
   case $opt in
-    f)
-      root_check;
-      echo "${BLD}Running!${RST}" >&2;
-      ;;
-    h)
-      usage;
-      exit 2;
-      ;;
-    s) 
-      shredder_ascii;
-      exit 2;
-      ;;
-    \?)
-      echo "Invalid option: -$OPTARG" >&2;
-      usage;
-      exit 1;
-      ;;
+    f) root_check ;
+       echo "${BLD}Running!${RST}" >&2 ;
+       ;;
+    h) usage ;
+       exit ;
+       ;;
+    s) shredder_ascii ;
+       exit ;
+       ;;
+   \?) echo "Invalid option: -$OPTARG" >&2;
+       usage;
+       exit 1;
+       ;;
   esac
 done
-
 
 if [ -f /etc/redhat-release ] ; then
     rpm -q nwipe &>/dev/null

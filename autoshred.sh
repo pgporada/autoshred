@@ -184,6 +184,12 @@ check_prereqs() {
 
 
 check_args() {
+
+    if [ $# -ne 1 ]; then
+        usage
+        kill -9 $$
+    fi
+
     while getopts "fhs" opt; do
       case $opt in
         f) root_check; 

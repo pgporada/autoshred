@@ -16,11 +16,11 @@ check_config() {
     cd "${DIR}"
     if [ -f autoshred.conf ]; then
         source autoshred.conf
-        echo "${BLD}${GRN}[+]${RST} Config loaded from autoshred.conf"
+        echo "${BLD}${GRN}[+]${RST} Config loaded from "${DIR}"/autoshred.conf"
     else
-        echo "${BLD}${RED}[!]${RST} autoshred.conf was not located"
-        echo "${BLD}${YEL}[-]${RST} Creating a template => autoshred.example.conf"
-        echo "${BLD}${YEL}[-]${RST} Please configure autoshred.example.conf, rename it to autoshred.conf,  and run this script again"
+        echo "${BLD}${RED}[!]${RST} "${DIR}"/autoshred.conf was not located"
+        echo "${BLD}${YEL}[-]${RST} Creating a template => "${DIR}"/autoshred.example.conf"
+        echo "${BLD}${YEL}[-]${RST} Please configure autoshred.example.conf, rename it to autoshred.conf, and run this script again"
         cat <<- "EOL" > autoshred.example.conf
 ####
 #### WARNING: USE autoshred.sh AT YOUR OWN RISK.

@@ -49,6 +49,11 @@ METHOD=dodshort
 #### Rounds of wiping method
 #ROUNDS=1
 ROUNDS=3
+
+#### Use a script that notifies the user of the destruction status
+# Set to 0 for off, 1 for on
+NOTIFICATION=0
+NOTIFYSCRIPT="led-notifier.py"
 EOL
     kill -9 $$
     fi
@@ -244,6 +249,10 @@ run_bddd() {
         echo "${BLD}+ Current running jobs +${RST}"
         echo "${BLD}+----------------------+${RST}"
         ps aux | grep nwipe | grep -v grep
+
+	if [ $NOTIFCATIONS == 1 ]; then
+		./${NOTIFYSCRIPT}
+	fi
 
         KEYPRESS="$(cat -v)"
         unset DETECTED

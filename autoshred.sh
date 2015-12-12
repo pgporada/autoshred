@@ -229,9 +229,9 @@ run_bddd() {
             echo "/dev/$i"
 
             if [ -b "/dev/$i" ]; then
-                if [ -z $(ps aux | grep nwipe | grep $i | egrep -v '(grep|defunct|autonuke)' | awk '{print $16}' | sed 's|/dev/||g' | head -n1) ]; then
+                if [ -z $(ps aux | grep nwipe | grep $i | egrep -v '(grep|defunct)' | awk '{print $16}' | sed 's|/dev/||g' | head -n1) ]; then
                     bash -c "nwipe --autonuke --nogui -m $METHOD -r $ROUNDS /dev/$i 2>/dev/null; if [ $? -eq 0 ]; then echo 1 > /sys/block/$i/device/delete; fi;" & &>/dev/null
-                elif [ ! -z $(ps aux | grep nwipe | egrep -v "($i|grep|defunct|autonuke)" | awk '{print $16}' | sed 's|/dev/||g' | head -n1) ]; then
+                elif [ ! -z $(ps aux | grep nwipe | egrep -v "($i|grep|defunct)" | awk '{print $16}' | sed 's|/dev/||g' | head -n1) ]; then
                     continue
                 fi
             fi
@@ -241,7 +241,7 @@ run_bddd() {
         echo
         echo "${BLD}+ Current running jobs +${RST}"
         echo "${BLD}+----------------------+${RST}"
-        ps aux | grep nwipe | grep -v grep
+        ps aux | grep nwipe | egrep -v '(grep|delete)'
 
 	if [ $NOTIFICATION -eq 1 ]; then 
 		if [ ${#DETECTED[@]} -ne 0 ]; then

@@ -12,7 +12,7 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setup(LED, GPIO.OUT)
 
 GPIO.output(LED, GPIO.HIGH)
-sleep(.5)
+sleep(.2)
 GPIO.output(LED, GPIO.LOW)
 
 GPIO.cleanup()

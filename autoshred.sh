@@ -250,8 +250,10 @@ run_bddd() {
         echo "${BLD}+----------------------+${RST}"
         ps aux | grep nwipe | grep -v grep
 
-	if [ $NOTIFICATION -eq 1 ]; then
-		./${NOTIFYSCRIPT}
+	if [ $NOTIFICATION -eq 1 ]; then 
+		if [ ${#DETECTED[@]} -ne 0 ]; then
+			./${NOTIFYSCRIPT}
+		fi
 	fi
 
         KEYPRESS="$(cat -v)"

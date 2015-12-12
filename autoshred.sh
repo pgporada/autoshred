@@ -250,7 +250,7 @@ run_bddd() {
         echo "${BLD}+----------------------+${RST}"
         ps aux | grep nwipe | grep -v grep
 
-	if [ $NOTIFCATIONS -eq 1 ]; then
+	if [ $NOTIFCATION -eq 1 ]; then
 		./${NOTIFYSCRIPT}
 	fi
 

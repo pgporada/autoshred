@@ -30,13 +30,6 @@ check_config() {
 #EXCLUSION=("sda" "sdb" "sdc" "sr0") 
 EXCLUSION=("sda" "sdb" "sr0")
 
-#### This is a short list of terminals that support the -e command to run commands.
-#USERTERM=konsole
-#USERTERM=terminator
-#USERTERM=eterm
-#USERTERM=terminology
-USERTERM=gnome-terminal
-
 #### Wiping method
 #METHOD=dod
 #METHOD=gutmann
@@ -236,9 +229,9 @@ run_bddd() {
             echo "/dev/$i"
 
             if [ -b "/dev/$i" ]; then
-                if [ -z $(ps aux | grep nwipe | grep $i | egrep -v '(grep|defunct)' | awk '{print $16}' | sed 's|/dev/||g' | head -n1) ]; then
-                    $USERTERM -e "bash -c \"nwipe --autonuke --nogui -m $METHOD -r $ROUNDS /dev/$i 2>/dev/null; if [ $? -eq 0 ]; then echo 1 > /sys/block/$i/device/delete && shredder_ascii && echo 'Exiting in 60' && sleep 60 && exit ; else echo '[!!!!!!!] Shit was fucked up with /dev/$i'; fi;\"" & &>/dev/null
-                elif [ ! -z $(ps aux | grep nwipe | egrep -v "($i|grep|defunct)" | awk '{print $16}' | sed 's|/dev/||g' | head -n1) ]; then
+                if [ -z $(ps aux | grep nwipe | grep $i | egrep -v '(grep|defunct|autonuke)' | awk '{print $16}' | sed 's|/dev/||g' | head -n1) ]; then
+                    bash -c "nwipe --autonuke --nogui -m $METHOD -r $ROUNDS /dev/$i 2>/dev/null; if [ $? -eq 0 ]; then echo 1 > /sys/block/$i/device/delete; fi;" & &>/dev/null
+                elif [ ! -z $(ps aux | grep nwipe | egrep -v "($i|grep|defunct|autonuke)" | awk '{print $16}' | sed 's|/dev/||g' | head -n1) ]; then
                     continue
                 fi
             fi

@@ -3,7 +3,9 @@
 <!-- /BADGES -->
 
 # autoshred
-A wrapper around nwipe for a friends business
+[Nwipe](http://sourceforge.net/projects/nwipe/) wrapper script that will allow you to plug in external drives and automatically wipe them. Nwipe is the tool that DBAN uses under the hood to perform its wipes.
 
-# Usage
-You will want to run this in *screen* on your device.
+## Usage
+
+
+Thank you for using my software! If you find it useful to you, please consider donating some beer money to me via the PayPal badge above :beers:

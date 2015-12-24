@@ -18,4 +18,4 @@ sudo ./autoshred -f
 ```
 
 
-Thank you for using my software! If you find it useful to you, please consider donating some beer money to me via the PayPal badge above. :beers:
+Thank you for using my software! If you find my code useful to you or your organization, please consider donating some beer money to me via the PayPal badge above. :smile: :beers:

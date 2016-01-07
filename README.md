@@ -19,3 +19,5 @@ sudo ./autoshred -f
 
 
 Thank you for using my software! If you find my code useful to you or your organization, please consider donating some beer money to me via the PayPal badge above. :smile: :beers:
+
+Thanks to http://www.retrojunkie.com/asciiart/cartchar/turtles.htm for the Shredder ascii art.

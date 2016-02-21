@@ -1,7 +1,7 @@
 #!/bin/bash
 # AUTHOR:   Phil Porada - philporada@gmail.com
-# WHAT:     Automatically runs nwipe on any block device plugged into the computer aside from devices in the exclusion list
-# NOTES:    I do not own any rights to Shredder or nwipe.
+# WHAT:     Automatically runs shred on any block device plugged into the computer aside from devices in the exclusion list
+# NOTES:    I do not own any rights to Shredder or shred.
 
 BLD=$(tput bold)
 RST=$(tput sgr0)
@@ -30,18 +30,9 @@ check_config() {
 #EXCLUSION=("sda" "sdb" "sdc" "sr0") 
 EXCLUSION=("sda" "sdb" "sr0")
 
-#### Wiping method
-#METHOD=dod
-#METHOD=gutmann
-#METHOD=prng
-#METHOD=ops2
-#METHOD=zero
-#METHOD=quick
-METHOD=dodshort
-
 #### Rounds of wiping method
-#ROUNDS=1
-ROUNDS=3
+ROUNDS=1
+#ROUNDS=3
 
 #### Use a script that notifies the user of the destruction status
 # Set to 0 for off, 1 for on
@@ -159,28 +150,6 @@ script_update() {
 }
 
 
-check_prereqs() {
-    if [ -f /etc/redhat-release ] ; then
-        rpm -q nwipe &>/dev/null
-        if [ $? -eq 1 ]; then
-            echo "${BLD}${RED}[!]${RST} Nwipe  not found. Installing nwipe"
-            sudo yum install -y nwipe
-            echo "${BLD}${GRN}[+]${RST} Nwipe installed @ $(which nwipe)"
-        fi
-    elif [ -f /etc/debian_version ]; then
-        dpkg-query -l nwipe &>/dev/null
-        if [ $? -eq 1 ]; then
-            echo "${BLD}${RED}[!]${RST} Nwipe  not found. Installing nwipe"
-            sudo apt-get install -y nwipe
-            echo "${BLD}${GRN}[+]${RST} Nwipe installed @ $(which nwipe)"
-        fi
-    else 
-        echo "${BLD}${RED}[!]${RST} Unsupported disto at this time"
-        kill -9 $$ 2>/dev/null
-    fi
-}
-
-
 check_args() {
 
     if [ $# -ne 1 ]; then
@@ -229,9 +198,9 @@ run_bddd() {
             echo "/dev/$i"
 
             if [ -b "/dev/$i" ]; then
-                if [ -z $(ps aux | grep nwipe | grep $i | egrep -v '(grep|defunct)' | awk '{print $16}' | sed 's|/dev/||g' | head -n1) ]; then
-                    bash -c "nwipe --autonuke --nogui -m $METHOD -r $ROUNDS /dev/$i 2>/dev/null; if [ $? -eq 0 ]; then echo 1 > /sys/block/$i/device/delete; fi;" & &>/dev/null
-                elif [ ! -z $(ps aux | grep nwipe | egrep -v "($i|grep|defunct)" | awk '{print $16}' | sed 's|/dev/||g' | head -n1) ]; then
+                if [ -z $(ps aux | grep " shred" | grep $i | egrep -v '(grep|defunct)' | awk '{print $16}' | sed 's|/dev/||g' | head -n1) ]; then
+                    bash -c "shred --force --zero --iterations=$ROUNDS /dev/$i 2>/dev/null; if [ $? -eq 0 ]; then echo 1 > /sys/block/$i/device/delete; fi;" & &>/dev/null
+                elif [ ! -z $(ps aux | grep " shred" | egrep -v "($i|grep|defunct)" | awk '{print $16}' | sed 's|/dev/||g' | head -n1) ]; then
                     continue
                 fi
             fi
@@ -241,7 +210,7 @@ run_bddd() {
         echo
         echo "${BLD}+ Current running jobs +${RST}"
         echo "${BLD}+----------------------+${RST}"
-        ps aux | grep nwipe | egrep -v '(grep|delete)'
+        ps aux | grep " shred" | egrep -v '(grep|delete)'
 
 	if [ $NOTIFICATION -eq 1 ]; then 
 		if [ ${#DETECTED[@]} -ne 0 ]; then
@@ -266,7 +235,6 @@ trap cleanup SIGINT SIGTERM SIGKILL SIGTSTP
 ### Order of operations
 script_update
 check_config
-check_prereqs
 check_args "${@}"
 clear
 export -f shredder_ascii

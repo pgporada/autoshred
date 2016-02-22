@@ -38,7 +38,7 @@ ROUNDS=1
 NOTIFICATION=0
 NOTIFYSCRIPT="led-notifier.py"
 
-#### Update override. If set to 1, will exit if an update is detected.
+#### Update override. If set to 1, will continue without updating.
 OVERRIDE=0
 EOL
     kill -9 $$
@@ -124,6 +124,9 @@ display_header() {
     echo "                               ${BLD}${BLU}#${RST}  ${YEL}Block Device Data Destroyer   ${BLD}${BLU}#${RST}"
     echo "                               ${BLD}${BLU}#${RST} ${YEL}==>  Fuck my data up, fam  <== ${BLD}${BLU}#${RST}"
     echo "                               ${BLD}${BLU}##################################${RST}"
+    if [ $UPDATE -eq 1 ]; then
+        echo "                         ${RED}${BLD}Autoshred has an update. Run \`git pull\`${RST}"
+    fi
 }
 
 
@@ -147,15 +150,16 @@ root_check() {
 
 script_update() {
     cd "${DIR}"
-    echo "${BLD}${GRN}[+]${RST} Checking https://github.com/pgporada/autoshred repository for updates"
-    if [ $(git rev-parse HEAD) = $(git ls-remote $(git rev-parse --abbrev-ref @{u} | sed 's/\// /g') | cut -f1) ]; then
-        echo "${BLD}${GRN}[+]${RST} Autoshred is up to date"
-    else 
+    git fetch
+    if [ $(git rev-parse HEAD) != $(git rev-parse @{u}) ]; then
         echo "${BLD}${YEL}[-]${RST} Autoshred has an update."
         echo "${BLD}${YEL}[-]${RST} Run ${BLD}git pull${RST} to update Autoshred."
         UPDATE=1
-        sleep 10
+    else
+        echo "${BLD}${GRN}[+]${RST} Autoshred is up to date"
+        UPDATE=0
     fi
+        sleep 10
 }
 
 
@@ -168,9 +172,7 @@ check_args() {
 
     while getopts "fhs" opt; do
       case $opt in
-        f) root_check; 
-           echo "${BLD}${GRN}[+]${RST} Running!" >&2;
-           ;;
+        f) root_check;;
         h) usage;
            kill -9 $$;
            ;;
@@ -243,15 +245,14 @@ run_bddd() {
 check_config
 check_args "${@}"
 
-script_update
-if [ $UPDATE -eq 1 ] && [ $OVERRIDE -eq 0 ]; then 
-    exit
-else
-    trap cleanup SIGINT SIGTERM SIGKILL SIGTSTP
-    clear
-    export -f shredder_ascii
-    shredder_ascii
-    display_header
-    sleep 5
-    run_bddd
+if [ $OVERRIDE -eq 0 ]; then 
+    script_update
 fi
+
+trap cleanup SIGINT SIGTERM SIGKILL SIGTSTP
+clear
+export -f shredder_ascii
+shredder_ascii
+display_header
+sleep 5
+run_bddd

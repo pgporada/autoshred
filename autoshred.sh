@@ -32,12 +32,14 @@ EXCLUSION=("sda" "sdb" "sr0")
 
 #### Rounds of wiping method
 ROUNDS=1
-#ROUNDS=3
 
 #### Use a script that notifies the user of the destruction status
 # Set to 0 for off, 1 for on
 NOTIFICATION=0
 NOTIFYSCRIPT="led-notifier.py"
+
+#### Update override. If set to 1, will exit if an update is detected.
+OVERRIDE=0
 EOL
     kill -9 $$
     fi
@@ -49,7 +51,7 @@ usage() {
     echo "${BLD}${RED}# WARNING: THIS SCRIPT WILL NUKE DATA IN ANY BLOCK DEVICE NOT IN THE EXCLUSION LIST #${RST}"
     echo "${BLD}${RED}#####################################################################################${RST}"
     echo
-    echo "${BLD}Current exclusion list. THIS IS IMPORTANT.${RST}"
+    echo "${BLD}Current exclusion list. Run \`lsblk\` to check mounted devices.${RST}"
     echo "${BLD}+--------------------+${RST}"
     for i in ${EXCLUSION[@]}; do
         echo "/dev/$i"
@@ -57,13 +59,13 @@ usage() {
     echo
     echo "${BLD}Script Usage${RST}"
     echo "${BLD}+--------------------+${RST}"
-    echo "[ -f ]   |   Run the script. By default this will be 3 passes of the DoD wipe. Configure autoshred.conf to change this"
+    echo "${BLD}[-f]${RST}   |   Run the script. By default this will be 3 passes of the DoD wipe. Configure autoshred.conf to change this"
     echo "ex: sudo ./$(basename $0) -f"
     echo
-    echo "[ -h ]   |   Show this help message."
+    echo "${BLD}[-h]${RST}   |   Show this help message."
     echo "ex: ./$(basename $0) -h"
     echo
-    echo "[ -s ]   |   Display Shredder and exit"
+    echo "${BLD}[-s]${RST}   |   Display Shredder and exit"
     echo "ex: ./$(basename $0) -s"
     echo
     echo "${BLD}Important Read for Data Sanitization${RST}"
@@ -120,7 +122,7 @@ EOF
 display_header() {
     echo "                               ${BLD}${BLU}##################################${RST}"
     echo "                               ${BLD}${BLU}#${RST}  ${YEL}Block Device Data Destroyer   ${BLD}${BLU}#${RST}"
-    echo "                               ${BLD}${BLU}#${RST} ${YEL}==> because fuck your data <== ${BLD}${BLU}#${RST}"
+    echo "                               ${BLD}${BLU}#${RST} ${YEL}==>  Fuck my data up, fam  <== ${BLD}${BLU}#${RST}"
     echo "                               ${BLD}${BLU}##################################${RST}"
 }
 
@@ -146,7 +148,14 @@ root_check() {
 script_update() {
     cd "${DIR}"
     echo "${BLD}${GRN}[+]${RST} Checking https://github.com/pgporada/autoshred repository for updates"
-    git pull
+    if [ $(git rev-parse HEAD) = $(git ls-remote $(git rev-parse --abbrev-ref @{u} | sed 's/\// /g') | cut -f1) ]; then
+        echo "${BLD}${GRN}[+]${RST} Autoshred is up to date"
+    else 
+        echo "${BLD}${YEL}[-]${RST} Autoshred has an update."
+        echo "${BLD}${YEL}[-]${RST} Run ${BLD}git pull${RST} to update Autoshred."
+        UPDATE=1
+        sleep 10
+    fi
 }
 
 
@@ -230,15 +239,19 @@ run_bddd() {
 }
 
 
-trap cleanup SIGINT SIGTERM SIGKILL SIGTSTP
-
 ### Order of operations
-script_update
 check_config
 check_args "${@}"
-clear
-export -f shredder_ascii
-shredder_ascii
-display_header
-sleep 5
-run_bddd
+
+script_update
+if [ $UPDATE -eq 1 ] && [ $OVERRIDE -eq 0 ]; then 
+    exit
+else
+    trap cleanup SIGINT SIGTERM SIGKILL SIGTSTP
+    clear
+    export -f shredder_ascii
+    shredder_ascii
+    display_header
+    sleep 5
+    run_bddd
+fi

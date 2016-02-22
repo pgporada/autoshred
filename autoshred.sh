@@ -12,7 +12,7 @@ BLU=$(tput setaf 4)
 DIR=$(dirname "$(readlink -f "$0")")
 KEYPRESS=""
 
-check_config() {
+function check_config() {
     cd "${DIR}"
     if [ -f autoshred.conf ]; then
         source autoshred.conf
@@ -46,7 +46,7 @@ EOL
 }
 
 
-usage() {
+function usage() {
     echo "${BLD}${RED}#####################################################################################${RST}"
     echo "${BLD}${RED}# WARNING: THIS SCRIPT WILL NUKE DATA IN ANY BLOCK DEVICE NOT IN THE EXCLUSION LIST #${RST}"
     echo "${BLD}${RED}#####################################################################################${RST}"
@@ -75,7 +75,7 @@ usage() {
 }
 
 
-shredder_ascii() {
+function shredder_ascii() {
     # Thanks to http://www.retrojunkie.com/asciiart/cartchar/turtles.htm
     cat <<- 'EOF'
                           .;iiiiii;;.
@@ -119,7 +119,7 @@ EOF
 }
 
 
-display_header() {
+function display_header() {
     echo "                               ${BLD}${BLU}##################################${RST}"
     echo "                               ${BLD}${BLU}#${RST}  ${YEL}Block Device Data Destroyer   ${BLD}${BLU}#${RST}"
     echo "                               ${BLD}${BLU}#${RST} ${YEL}==>  Fuck my data up, fam  <== ${BLD}${BLU}#${RST}"
@@ -130,13 +130,13 @@ display_header() {
 }
 
 
-cleanup() {
+function cleanup() {
     echo "${BLD}${YEL}[-]${RST} Any prior jobs running will continue running even after this script has exited."
     echo "${BLD}${YEL}[-]${RST} Exiting..."
 }
 
 
-root_check() {
+function root_check() {
     # Run only with root privs due to the forceful unmounting we need to do.
     # You can't sudo echo. You can technically... but whatever
     if [ $EUID -ne 0 ]; then
@@ -148,23 +148,24 @@ root_check() {
 }
 
 
-script_update() {
+function script_update() {
     cd "${DIR}"
     git fetch
     if [ $(git rev-parse HEAD) != $(git rev-parse @{u}) ]; then
         echo "${BLD}${YEL}[-]${RST} Autoshred has an update."
-        echo "${BLD}${YEL}[-]${RST} Run ${BLD}git pull${RST} to update Autoshred."
+        if [ $OVERRIDE -ne 1 ]; then
+            echo "${BLD}${YEL}[-]${RST} Run ${BLD}git pull${RST} to update Autoshred."
+            exit
+        fi
         UPDATE=1
     else
         echo "${BLD}${GRN}[+]${RST} Autoshred is up to date"
         UPDATE=0
     fi
-        sleep 10
 }
 
 
-check_args() {
-
+function check_args() {
     if [ $# -ne 1 ]; then
         usage
         kill -9 $$
@@ -188,7 +189,7 @@ check_args() {
 }
 
 
-run_bddd() {
+function run_bddd() {
     # This allows you to capture keyboard entries on stdin in a nonblocking fashion
     if [ -t 0 ]; then 
         stty -echo -icanon -icrnl time 0 min 0

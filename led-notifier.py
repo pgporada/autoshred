@@ -7,7 +7,7 @@ try:
 except RuntimeError:
     print("You need to run as sudo")
 
-LED=19
+LED = 19
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(LED, GPIO.OUT)
 

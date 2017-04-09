@@ -1,0 +1,42 @@
+Version 0.1.0
+ - Added bump version script
+ - Fixed E225 with flake8
+ - Whoopsidaisies
+ - Changed function names to state function
+ - Updated gitignore
+ - Added gitignore
+ - Fixed update issues
+ - testing
+ - testing
+ - test
+ - Merge branch 'master' of github.com:pgporada/autoshred
+ - Fixes issue #1
+ - Update README.md
+ - Updated readme
+ - Update README.md
+ - Update README.md
+ - Swapped out nwipe for shred. Nwipe was causing the raspberry pi that this thing runs on to hang.
+ - Forgot to add the readme to the last commit
+ - Added example conf and thanks in the readme
+ - Updated readme
+ - Updated readme
+ - Updated readme
+ - Added a paypal badge.
+ - Fixed some display issue
+ - Updated readme
+ - Faster blinking
+ - Made this thing run headless.
+ - Added logic to flash the led only if a destroyable device is detected
+ - Fixed variable name
+ - Fixed variable name
+ - Fixed a comparison
+ - Added a basic python script that blinks an LED on a Raspberry Pi breadboard
+ - Added a basic python script that blinks an LED on a Raspberry Pi breadboard
+ - Fixed up the usage func
+ - Fixed no args issue
+ - Added config file and separated tasks in functions
+ - Added auto updater
+ - Separated some logic into functions. Added a shredder and root check function. Improved the usage function
+ - Moved this to its own separate repo
+ - Initial commit
+

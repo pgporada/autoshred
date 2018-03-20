@@ -122,11 +122,8 @@ EOF
 function display_header() {
     echo "                               ${BLD}${BLU}##################################${RST}"
     echo "                               ${BLD}${BLU}#${RST}  ${YEL}Block Device Data Destroyer   ${BLD}${BLU}#${RST}"
-    echo "                               ${BLD}${BLU}#${RST} ${YEL}==>  Fuck my data up, fam  <== ${BLD}${BLU}#${RST}"
+    echo "                               ${BLD}${BLU}#${RST} ${YEL}==> Data today, /dev/null tomorrow  <== ${BLD}${BLU}#${RST}"
     echo "                               ${BLD}${BLU}##################################${RST}"
-    if [ $UPDATE -eq 1 ]; then
-        echo "                         ${RED}${BLD}Autoshred has an update. Run \`git pull\`${RST}"
-    fi
 }
 
 
@@ -157,10 +154,8 @@ function script_update() {
             echo "${BLD}${YEL}[-]${RST} Run ${BLD}git pull${RST} to update Autoshred."
             exit
         fi
-        UPDATE=1
     else
         echo "${BLD}${GRN}[+]${RST} Autoshred is up to date"
-        UPDATE=0
     fi
 }
 

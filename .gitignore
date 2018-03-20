@@ -1,1 +1,4 @@
 autoshred.conf
+*.log
+.vagrant
+*.img

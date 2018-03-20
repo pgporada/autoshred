@@ -28,7 +28,7 @@ function check_config() {
 
 #### This block devices will be spared from data destruction.
 #EXCLUSION=("sda" "sdb" "sdc" "sr0")
-EXCLUSION=("sda" "sdb" "sr0", "mmcblk0")
+EXCLUSION=("sda" "sdb" "sr0" "mmcblk0")
 
 #### Rounds of wiping method
 ROUNDS=1

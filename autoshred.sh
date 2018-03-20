@@ -27,8 +27,8 @@ function check_config() {
 ####
 
 #### This block devices will be spared from data destruction.
-#EXCLUSION=("sda" "sdb" "sdc" "sr0") 
-EXCLUSION=("sda" "sdb" "sr0")
+#EXCLUSION=("sda" "sdb" "sdc" "sr0")
+EXCLUSION=("sda" "sdb" "sr0", "mmcblk0")
 
 #### Rounds of wiping method
 ROUNDS=1
@@ -191,7 +191,7 @@ function check_args() {
 
 function run_bddd() {
     # This allows you to capture keyboard entries on stdin in a nonblocking fashion
-    if [ -t 0 ]; then 
+    if [ -t 0 ]; then
         stty -echo -icanon -icrnl time 0 min 0
     fi
 
@@ -224,11 +224,11 @@ function run_bddd() {
         echo "${BLD}+----------------------+${RST}"
         ps aux | grep " shred" | egrep -v '(grep|delete)'
 
-	if [ $NOTIFICATION -eq 1 ]; then 
-		if [ ${#DETECTED[@]} -ne 0 ]; then
-			./${NOTIFYSCRIPT}
-		fi
-	fi
+	    if [ $NOTIFICATION -eq 1 ]; then
+		    if [ ${#DETECTED[@]} -ne 0 ]; then
+			    ./${NOTIFYSCRIPT}
+		    fi
+	    fi
 
         KEYPRESS="$(cat -v)"
         unset DETECTED
@@ -246,7 +246,7 @@ function run_bddd() {
 check_config
 check_args "${@}"
 
-if [ $OVERRIDE -eq 0 ]; then 
+if [ $OVERRIDE -eq 0 ]; then
     script_update
 fi
 

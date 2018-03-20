@@ -120,10 +120,10 @@ EOF
 
 
 function display_header() {
-    echo "                               ${BLD}${BLU}##################################${RST}"
-    echo "                               ${BLD}${BLU}#${RST}  ${YEL}Block Device Data Destroyer   ${BLD}${BLU}#${RST}"
+    echo "                               ${BLD}${BLU}###########################################${RST}"
+    echo "                               ${BLD}${BLU}#${RST}     ${YEL}Block Device Data Destroyer         ${BLD}${BLU}#${RST}"
     echo "                               ${BLD}${BLU}#${RST} ${YEL}==> Data today, /dev/null tomorrow  <== ${BLD}${BLU}#${RST}"
-    echo "                               ${BLD}${BLU}##################################${RST}"
+    echo "                               ${BLD}${BLU}###########################################${RST}"
 }
 
 

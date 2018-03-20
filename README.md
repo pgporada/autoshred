@@ -10,7 +10,7 @@
 Installation
 
     sudo apt update
-    sudo apt install -y git coreutils vim
+    sudo apt install -y git coreutils vim screen
     git clone https://github.com/pgporada/autoshred && cd autoshred
     mv autoshred.example.conf autoshred.conf
     lsblk
@@ -20,8 +20,7 @@ Installation
 Starting the program on boot
 
     sudo crontab -e
-    # In the crontab
-    @reboot /home/pi/autoshred/autoshred.conf &
+    @reboot /usr/bin/screen -d -m /home/pi/autoshred/autoshred.sh -f
 
 Displays some help
 
@@ -33,6 +32,7 @@ Destroy data
 
 Verifying that autoshred is running
 
+    screen -ls
     ps aux | grep shred
 
 - - - -

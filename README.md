@@ -4,6 +4,8 @@
 # Overview: autoshred
 [Shred](https://www.gnu.org/software/coreutils/manual/html_node/shred-invocation.html) wrapper script that will allow you to plug in external drives and automatically wipe them. Nwipe is the tool that DBAN uses under the hood to perform its wipes.
 
+![](imgs/shred.jpeg)
+
 - - - -
 # Usage
 

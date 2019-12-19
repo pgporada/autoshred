@@ -2,7 +2,7 @@
 [![License](https://img.shields.io/badge/license-GPLv3-brightgreen.svg)](LICENSE)
 
 # Overview: autoshred
-[Shred](https://www.gnu.org/software/coreutils/manual/html_node/shred-invocation.html) wrapper script that will allow you to plug in external drives and automatically wipe them. Nwipe is the tool that DBAN uses under the hood to perform its wipes.
+[Shred](https://www.gnu.org/software/coreutils/manual/html_node/shred-invocation.html) wrapper script that will allow you to plug in external drives and automatically wipe the data. While shooting, smashing, and drilling harddrives is cool and fun, why not repurpose the drives?
 
 ![](imgs/shred.jpeg)
 

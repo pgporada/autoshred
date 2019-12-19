@@ -59,7 +59,7 @@ function usage() {
     echo
     echo "${BLD}Script Usage${RST}"
     echo "${BLD}+--------------------+${RST}"
-    echo "${BLD}[-f]${RST}   |   Run the script. By default this will be 3 passes of the DoD wipe. Configure autoshred.conf to change this"
+    echo "${BLD}[-f]${RST}   |   Run the script. By default this will be 3 passes of the DoD wipe. Configure autoshred.conf to change this value."
     echo "ex: sudo ./$(basename $0) -f"
     echo
     echo "${BLD}[-h]${RST}   |   Show this help message."
